@@ -1,0 +1,15 @@
+2019-12-02
+   问题： 使用elementUI 日期选择器 通过路由做不同的日期选择格式 下拉框的位置会发生错误
+          尝试的解决方式  将下拉选项的 left top写死 无法解决
+                         通过将v-if 变为 v-show 无法解决
+                         <el-datepick :type="$route.params.type" v-if="@route.params.type === 'week'></el-datepick>
+                         <el-datepick :type="$route.params.type" v-if="@route.params.type === 'year'></el-datepick>
+                         <el-datepick :type="$route.params.type" v-if="@route.params.type === 'month'></el-datepick>
+                         无法解决
+
+                         解决方法(lh) <el-datepick v-for="datePickItem in datePick" v-if="$route.params.type === 'datePickItem.type"></el-datepick>
+
+                         使用循环渲染可以将这个问题解决 原因目前还不清楚
+
+    问题： 在查看elementUI datePick的源码中发现  可以适应.vue文件 作为mixin
+           后查看 iview 也同样的使用 .vue文件作为mixin 目前原理还不明白                     
