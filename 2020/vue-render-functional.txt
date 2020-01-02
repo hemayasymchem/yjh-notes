@@ -1,0 +1,142 @@
+本篇主要写的是 vue-render函数的参数 和 vue组件 functional的参数
+
+一、vue-render函数的三个参数
+    参考文献地址： https://www.jianshu.com/p/9f933efc7036
+
+    render函数的第一个参数 必须 可选类型 1 string: html  2 object: 一个含有数据选项的对象 3 function：返回一个含有数据选项的对象
+    Vue.component('child', {
+      props: ['level'],
+      render: function(h) {
+        // 第一种
+        return h('h1')
+
+        // 第二种
+        return h({
+          template: '<div>谈笑风声</div>'
+        })
+
+        // 第三种
+        var domFun = function() {
+          return {
+            template: '<div>谈笑风声</div>'
+          }
+        }
+        return h(domFun())
+      }
+    })
+
+    render的第二个参数 非必须 只能是对象 object { class style attrs domProps }
+    Vue.component('child', {
+      props: ['level'],
+      render: function(h) {
+        return h('div', {
+          class: {
+            foo: true,
+            baz: false
+          },
+          style: {
+            height: '34px',
+            background: 'orange',
+            fontSize: '12px' 
+          },
+          attrs: {
+            id: 'foo',
+            title: 'baz'
+          },
+          domProps: {
+            innerHTML: '<span style="color: blue; font-size：12px">将心比心</span>'
+          }
+        })
+      }
+    })    
+
+    render的第三个参数 代表子节点 String | Array 
+
+    Vue.component('child', {
+      props: ['level'],
+      render: function(h) {
+        return h('div', [
+          h('h1', '我是大标题'),
+          h('h2', '我是二标题'),
+          h('h3', '我是三标题')
+        ])
+      }
+    })
+
+
+
+
+二、 vue的函数式组件 地址： https://www.cnblogs.com/mmzuo-798/p/11778044.html
+
+    函数式组件 无状态（Stateless) 无实例(Instanceless)
+
+    创造一个函数式组件
+    export default {
+      name: 'demoFun',
+      funcitonal: true,
+      render(h ,context) { // 由于没有实例 所以不能使用this 用第二个参数 context代表 this
+        return h('button', 'click me')
+      }
+    }
+
+    context的属性
+    props 
+    children
+    slots (a slots object)
+    parent
+    listeners
+    injections
+    data
+    
+    其中data包含了其他属性的应用
+
+    1 demo1 使用 children
+    <template>
+      <dmeo-fun> click me </dmeo-fun>
+    </template>
+
+    export default {
+      name: 'demoFun',
+      functional: true,
+      render: function(h, context) {
+        return h('button', context.children)
+      }
+    }
+
+    2 事件定义  函数式组件没有实例，事件只能由父组件传递
+    <template>
+      <demo-fun @click='log'>
+        click me
+      </demo-fun>
+    </template>
+
+    export default {
+      functional: true,
+      render: function(h, context) {
+        return h('button', {
+          attrs: context.props,
+          on: {
+            click: context.listeners.click // 主要是这里
+          }
+        }, context.children)
+      }
+    }
+
+    3 上面的例子 写法还是比较复杂 其实context.data对象 已经包含了所有
+    export default {
+      name: 'demoFun'
+      functional: true,
+      render: function(h, context) {
+        return ('button', context.data, context.children )
+      }
+    }
+
+三、 Vue render函数的第二个参考地址
+     地址： https://blog.csdn.net/sansan_7957/article/details/83014838
+
+四、 vue 的官网地址   https://cn.vuejs.org/v2/guide/render-function.html
+
+
+
+
+    

@@ -1,1 +1,14 @@
 这里记录的是一些工作中遇到的问题
+
+
+function render(domObj) {
+  let el = document.createElement(domObj.type)
+  for (let key in domObj.props) {
+    setAttr(el, key, domObj.props[key])
+  }
+  domObj.children.forEach(child => {
+    child = (child instanceof Element) ? render(child) : document.createTextNode(child)
+    el.appendChild(child)
+  })
+  return el
+}

@@ -13,3 +13,8 @@
 
     问题： 在查看elementUI datePick的源码中发现  可以适应.vue文件 作为mixin
            后查看 iview 也同样的使用 .vue文件作为mixin 目前原理还不明白                     
+
+
+    学习（xs分享）  让虚拟DOM和DOM-diff不再成为你的绊脚石
+            地址：  https://juejin.im/post/5c8e5e4951882545c109ae9c
+            项目地址： https://github.com/chenhongdong/article/tree/develop/%E8%99%9A%E6%8B%9Fdom/dom-diff
