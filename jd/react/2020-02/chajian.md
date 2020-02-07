@@ -64,7 +64,7 @@ ramda 一款实用的 JavaScript 函数式编程库
 };
 
 /**
- * 京东 图片系统 上传
+ * 图片系统 上传
  */
  export const uploadImage = (file, onProgress) => {
   return new Promise((resolve, reject) => {
@@ -92,4 +92,73 @@ ramda 一款实用的 JavaScript 函数式编程库
   });
 }; 
 ```
+
+### ant_mall request方法
+```
+export const request = function(functionId, method="GET', params_json=undefined) {
+  let BASE_URL = '//api.healthid.com/client'
+  if (process.env.NODE_ENV === 'development') {
+    BASE_URL = '/client'
+  }
+  let URL = BASE_URL
+  let wq = wxTools.isQQ() || wxTools.isWeixin()
+  let payload = {
+    funtionId,
+    body: JSON.stringify(params_json),
+    loginType: wq ? 1 : undefined,
+    loginWQBiz: wq ? 'nethp-diag' : undefined
+  }
+
+  let options = {
+    methods,
+    headers: {
+      'Content-Type": 'appliation/x-www-form-urlencode',
+      Accept: 'applation/json, text/plain, */*'
+    },
+    creditals: 'include'
+  }
+
+  if (options.method === "GET") {
+    let query  = qs.stringify(payload),
+     URL = `${BASE_URL}?${query}`
+  }
+  if (options.method == "POST") {
+    const contentType = options.headers["Content-Type"].toLowerCase();
+    if (contentType == "application/json") {
+      options.body = JSON.stringify(payload);
+    }
+
+    if (contentType == "application/x-www-form-urlencoded") {
+      options.body = qs.stringify(payload);
+    }
+  }
+
+  return fetch(URL, options)
+    .then(checkStatus)
+    .then(parseJSON)
+    .then(res => {
+      if (res.code !== "0000") {
+        // if (res.code == "1023") {
+        //   toLogin(window.location.href);
+        //   return;
+        // }
+        // 请求的唯一标示
+        const excludes = [
+          'gwSystem/isLogin'
+        ];
+        if (!excludes.includes(functionId)) {
+         Toast.error(res.msg);
+        }
+      }
+
+      return res;
+    })
+    .catch(err => {
+      throw "The fucking code，响应异常了，贞操蛋";
+    });
+};
+}
+
+```
+
 
