@@ -81,3 +81,5 @@ createStore(rudecer, [initState], enhancer) 创建一个store 一个应用中只
   let store = applyMiddle(...middleware)(createStore)(reducer, preloadState)
 
 ```
+[csdn compose 和 reduce 方法](https://blog.csdn.net/astonishqft/article/details/82791622)
+

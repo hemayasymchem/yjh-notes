@@ -110,3 +110,50 @@ function setRoorFontSize() {
   })
 }
 ```
+
+### setState获取最新的state值 使用第二个参数 this.setState({}, cb)
+```
+this.setState({
+  info: 'newInfo'
+}, () => {
+  console.log(this.state.info, '这里看看最新的state')
+})
+```
+
+### 子组件默认一些变量和方法的解决方式 staticProps
+```
+calss childComponent extends React.Component {
+  statis defaultProps = { // 这里就是默认的方法和属性的值
+    setFocusFun: () => {},
+    searchBlur: () => {},
+    searchValue: ''
+  }
+
+  static propTyps = { // 还可以做校验 PropTypes是引入的插件
+    setIsFocus: PropTypes.func,
+    searchFun: PropTypes.func,
+    searchValue: PropTypes.string.isRequired // 还可以链式加规则
+  }
+  /**
+  * 子组件里尽量不做任何处理方式 都放到父组件去处理
+    this.props.func()
+  */
+}
+```
+
+### 组件使用多个类名
+```
+ <div className={`calss1 class2 class3-${isFocus ? 'focus' : 'none'}`}></div>
+```
+### jsx不能用if else 但是可以用三目
+```
+<div>
+{isFocus ? 
+ (<h1>真</h1>)
+ : (<h1>假</h1>)
+}
+</h1>
+
+图片的使用
+<img src={`${this.state.info ? demo1 : demo2}`}> 两个变量卸载${} 花括号里面
+```

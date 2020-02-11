@@ -44,3 +44,79 @@
                store.replaceReducer(connectRouter(history)(rootReducer))
            })
        }
+
+### history插件和 connected-react-router插件的组合使用
+```
+import {createBrowserHistory} from 'history'
+export default createBrowserHistory({
+    basename: process.env.NODE_ENV === 'production' ? '/s' : '
+})
+
+
+import { applyMiddleware, compose, createStore } from 'redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import rootReducer from './reducers';
+import history from './history';
+import api from '@/store/middlewares/api';
+import thunk from 'redux-thunk';
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(
+  connectRouter(history)(rootReducer), // new root reducer with router state
+  //{},
+  composeEnhancer(
+    applyMiddleware(
+      thunk,
+      api,
+      routerMiddleware(history) // for dispatching history actions
+    )
+  )
+);
+
+// Hot reloading
+if (module.hot) {
+  // Reload reducers
+  module.hot.accept('./reducers', () => {
+    store.replaceReducer(connectRouter(history)(rootReducer));
+  });
+}
+
+export default store;
+```       
+
+[csdn-React-history参考资料1](https://blog.csdn.net/mcYang0929/article/details/89315117)
+```
+在react-router中可以使用 <Link> 但是在组件外部使用
+import { createBrowserHistory } from 'history'
+const history = createBrowserHistory({
+    basename: '',
+    forceRefresh: true
+})
+export default history
+在其他位置
+import history form 'xxx/history'
+history.push()
+  history.push('/a')
+  history.push('/a', {name: ''})
+  history.push({
+      pathname: '/a',
+      state: {
+          name: '
+      }
+  })
+replace 方法 和 push方法使用形式一致 replace的作用是取代当前历史记录
+go 前进或者后退 history.go(-1)
+goBack goFroward
+
+```
+
+[另外一个文献history](https://www.cnblogs.com/ye-hcj/p/7741742.html)
+```
+history的三种创建方式
+  createBrowserHistory({  // 现在浏览器使用
+    basename： '', 基础链接
+    forceRefresh: false, 是否强制刷新整个页面
+    keyLength: 6, location.key的长度
+    xxx
+  })
+  未完待续
+```
